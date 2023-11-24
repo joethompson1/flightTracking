@@ -1,4 +1,4 @@
-package com.data_chain.app;
+package org.data_chain.app;
 
 import java.util.Properties;
 import java.io.InputStream;

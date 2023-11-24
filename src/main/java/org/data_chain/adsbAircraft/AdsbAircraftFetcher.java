@@ -1,4 +1,4 @@
-package com.data_chain.adsbAircraft;
+package org.data_chain.adsbAircraft;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,7 +11,9 @@ import java.util.ArrayList;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-
+/**
+ * Fetches aircraft information from ADS-B Exchange API based on geographic coordinates.
+ */
 public class AdsbAircraftFetcher {
 
 	private final String apiKey;
@@ -20,6 +22,14 @@ public class AdsbAircraftFetcher {
 	private final double latitude;
 	private final double longitude;
 
+	/**
+     * Constructs an AdsbAircraftFetcher with the specified API key, base URL, latitude, and longitude.
+     *
+     * @param apiKey     The API key for accessing the ADS-B Exchange API.
+     * @param baseUrl    The base URL of the ADS-B Exchange API.
+     * @param latitude   The latitude of the geographic location.
+     * @param longitude  The longitude of the geographic location.
+     */
 	public AdsbAircraftFetcher(String apiKey, String baseUrl, double latitude, double longitude) {
 		this.apiKey = apiKey;
 		this.baseUrl = baseUrl;
@@ -27,6 +37,13 @@ public class AdsbAircraftFetcher {
 		this.longitude = longitude;
 	}
 
+	/**
+     * Creates an HTTP connection to the specified API endpoint.
+     *
+     * @param endpoint The endpoint to be appended to the base URL.
+     * @return A configured HttpURLConnection.
+     * @throws IOException If an I/O exception occurs while creating the connection.
+     */
 	private HttpURLConnection createConnection(String endpoint) throws IOException {
 		URL adsbUrl = new URL(this.baseUrl + endpoint);
 		HttpURLConnection connection = (HttpURLConnection) adsbUrl.openConnection();
@@ -36,8 +53,15 @@ public class AdsbAircraftFetcher {
 		return connection;
 	}
 
+	/**
+     * Retrieves a list of aircraft within a specified radius from the geographic coordinates.
+     *
+     * @param radius The radius within which to retrieve aircraft (in nautical miles).
+     * @return A list of Flight objects representing the retrieved aircraft.
+     */
 	public List<Flight> getAircraft_x_NM(int radius) {
 		String endpoint = String.format("/lat/%s/lon/%s/dist/%d/", latitude, longitude, radius);
+		List<Flight> flights = new ArrayList<>();
 
 		try {
 			HttpURLConnection connection = createConnection(endpoint);
@@ -58,24 +82,23 @@ public class AdsbAircraftFetcher {
 				ObjectMapper objectMapper = new ObjectMapper();
 				JsonNode adsbJsonResponse = objectMapper.readTree(response.toString());
 
-				System.out.println(adsbJsonResponse);
-
-				List<Flight> flights = new ArrayList<>();
 				for (JsonNode jsonFlight : adsbJsonResponse.get("ac")) {
 					Flight flight = objectMapper.treeToValue(jsonFlight, Flight.class);
 					flights.add(flight);
 				}
+
+				// TODO: need to also send back time of request (now)
 				return flights;
 			}
 
 			else {
 				System.out.println("Failed to retrieve data. Response Code: " + responseCode);
-				return null;
+				return flights;
 			}
 
 		} catch(IOException e) {
 			e.printStackTrace();
-			return null;
+			return flights;
 		}
 	}
 
