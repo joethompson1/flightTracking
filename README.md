@@ -1,2 +1,2 @@
 # flightTracking
-Gets flight's data within a specified area and saves the data to a database
+Records all flight's data within a defined radius and saves results to a database
