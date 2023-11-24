@@ -1,10 +1,12 @@
-package com.data_chain.adsbAircraftFetcher;
+package com.data_chain.adsbAircraft;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
+import java.util.ArrayList;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,15 +27,20 @@ public class AdsbAircraftFetcher {
 		this.longitude = longitude;
 	}
 
-	public JsonNode getAircraft1NM() {
-		String endpoint = String.format("/lat/%s/lon/%s/dist/1/", latitude, longitude);
+	private HttpURLConnection createConnection(String endpoint) throws IOException {
+		URL adsbUrl = new URL(this.baseUrl + endpoint);
+		HttpURLConnection connection = (HttpURLConnection) adsbUrl.openConnection();
+		connection.setRequestMethod("GET");
+		connection.setRequestProperty("X-RapidAPI-Key", this.apiKey);
+		connection.setRequestProperty("X-RapidAPI-Host", "adsbexchange-com1.p.rapidapi.com");
+		return connection;
+	}
+
+	public List<Flight> getAircraft_x_NM(int radius) {
+		String endpoint = String.format("/lat/%s/lon/%s/dist/%d/", latitude, longitude, radius);
 
 		try {
-			URL adsbUrl = new URL(this.baseUrl + endpoint);
-			HttpURLConnection connection = (HttpURLConnection) adsbUrl.openConnection();
-			connection.setRequestMethod("GET");
-			connection.setRequestProperty("X-RapidAPI-Key", this.apiKey);
-			connection.setRequestProperty("X-RapidAPI-Host", "adsbexchange-com1.p.rapidapi.com");
+			HttpURLConnection connection = createConnection(endpoint);
 
 			int responseCode = connection.getResponseCode();
 
@@ -49,7 +56,16 @@ public class AdsbAircraftFetcher {
 				reader.close();
 
 				ObjectMapper objectMapper = new ObjectMapper();
-				return objectMapper.readTree(response.toString());
+				JsonNode adsbJsonResponse = objectMapper.readTree(response.toString());
+
+				System.out.println(adsbJsonResponse);
+
+				List<Flight> flights = new ArrayList<>();
+				for (JsonNode jsonFlight : adsbJsonResponse.get("ac")) {
+					Flight flight = objectMapper.treeToValue(jsonFlight, Flight.class);
+					flights.add(flight);
+				}
+				return flights;
 			}
 
 			else {

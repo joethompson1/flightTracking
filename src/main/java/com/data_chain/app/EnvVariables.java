@@ -9,6 +9,7 @@ public class EnvVariables {
     public final double latitude;
     public final double longitude;
     public final int interval;
+    public final int radius;
 
     public EnvVariables() {
         Properties properties = new Properties();
@@ -25,34 +26,50 @@ public class EnvVariables {
             e.printStackTrace();
         }
 
-        this.apiKey = properties.getProperty("API_KEY");
-        this.baseUrl = properties.getProperty("BASE_URL");
-        this.latitude = parseDoubleProperty(properties, "LATITUDE");
-        this.longitude = parseDoubleProperty(properties, "LONGITUDE");
-        this.interval = parseIntProperty(properties, "INTERVAL");
+        this.apiKey = System.getenv("API_KEY") != null
+            ? System.getenv("API_KEY") 
+            : properties.getProperty("API_KEY");
+
+        this.baseUrl = System.getenv("BASE_URL") != null
+            ? System.getenv("BASE_URL") 
+            : properties.getProperty("BASE_URL");
+
+        this.latitude = System.getenv("LATITUDE") != null
+            ? parseDoubleProperty(System.getenv("LATITUDE"))
+            : parseDoubleProperty(properties.getProperty("LATITUDE"));
+
+        this.longitude = System.getenv("LONGITUDE") != null
+            ? parseDoubleProperty(System.getenv("LONGITUDE"))
+            : parseDoubleProperty(properties.getProperty("LONGITUDE"));
+
+        this.interval = System.getenv("INTERVAL") != null
+            ? parseIntProperty(System.getenv("INTERVAL"))
+            : parseIntProperty(properties.getProperty("INTERVAL"));
+
+        this.radius = System.getenv("RADIUS") != null
+            ? parseIntProperty(System.getenv("RADIUS"))
+            : parseIntProperty(properties.getProperty("RADIUS"));
     }
 
-    private double parseDoubleProperty(Properties properties, String propertyName) {
-        String value = properties.getProperty(propertyName);
+    private double parseDoubleProperty(String value) {
         if (value != null) {
             try {
                 return Double.parseDouble(value);
             } catch (NumberFormatException e) {
-                throw new RuntimeException("Error parsing double property: " + propertyName, e);
+                throw new RuntimeException("Error parsing double property: " + value, e);
             }
         }
-        throw new RuntimeException("Missing double property: " + propertyName);
+        throw new RuntimeException("Missing double property: " + value);
     }
 
-    private int parseIntProperty(Properties properties, String propertyName) {
-        String value = properties.getProperty(propertyName);
+    private int parseIntProperty(String value) {
         if (value != null) {
             try {
                 return Integer.parseInt(value);
             } catch (NumberFormatException e) {
-                throw new RuntimeException("Error parsing int property: " + propertyName, e);
+                throw new RuntimeException("Error parsing int property: " + value, e);
             }
         }
-        throw new RuntimeException("Missing int property: " + propertyName);
+        throw new RuntimeException("Missing int property: " + value);
     }
 }
