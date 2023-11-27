@@ -40,9 +40,9 @@ public class AdsbAircraftFetcher {
 	/**
      * Creates an HTTP connection to the specified API endpoint.
      *
-     * @param endpoint The endpoint to be appended to the base URL.
-     * @return A configured HttpURLConnection.
-     * @throws IOException If an I/O exception occurs while creating the connection.
+     * @param endpoint 		The endpoint to be appended to the base URL.
+     * @return 				A configured HttpURLConnection.
+     * @throws IOException 	If an I/O exception occurs while creating the connection.
      */
 	private HttpURLConnection createConnection(String endpoint) throws IOException {
 		URL adsbUrl = new URL(this.baseUrl + endpoint);
@@ -56,12 +56,11 @@ public class AdsbAircraftFetcher {
 	/**
      * Retrieves a list of aircraft within a specified radius from the geographic coordinates.
      *
-     * @param radius The radius within which to retrieve aircraft (in nautical miles).
-     * @return A list of Flight objects representing the retrieved aircraft.
+     * @param radius 	The radius within which to retrieve aircraft (in nautical miles).
+     * @return 			Flights object containing list of flights and time of request.
      */
-	public List<Flight> getAircraft_x_NM(int radius) {
+	public Flights getAircraft_x_NM(int radius) throws IOException {
 		String endpoint = String.format("/lat/%s/lon/%s/dist/%d/", latitude, longitude, radius);
-		List<Flight> flights = new ArrayList<>();
 
 		try {
 			HttpURLConnection connection = createConnection(endpoint);
@@ -82,23 +81,24 @@ public class AdsbAircraftFetcher {
 				ObjectMapper objectMapper = new ObjectMapper();
 				JsonNode adsbJsonResponse = objectMapper.readTree(response.toString());
 
+				List<Flight> flightsArray = new ArrayList<>();
 				for (JsonNode jsonFlight : adsbJsonResponse.get("ac")) {
 					Flight flight = objectMapper.treeToValue(jsonFlight, Flight.class);
-					flights.add(flight);
+					flightsArray.add(flight);
 				}
 
-				// TODO: need to also send back time of request (now)
+				Flights flights = new Flights(flightsArray, adsbJsonResponse.get("now").asLong());
+
 				return flights;
 			}
 
 			else {
-				System.out.println("Failed to retrieve data. Response Code: " + responseCode);
-				return flights;
+				throw new IOException("Failed to retrieve data. Response Code: " + responseCode);
 			}
 
 		} catch(IOException e) {
 			e.printStackTrace();
-			return flights;
+			throw e;
 		}
 	}
 

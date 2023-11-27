@@ -4,3 +4,5 @@ src/main/resources/config/config.properties
 # Ignore target folder
 target/
 .env
+
+metabase/

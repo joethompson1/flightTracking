@@ -4,12 +4,21 @@ import java.util.Properties;
 import java.io.InputStream;
 
 public class EnvVariables {
+    public final String user;
     public final String apiKey;
     public final String baseUrl;
     public final double latitude;
     public final double longitude;
-    public final int interval;
+    public final int waitTime;
     public final int radius;
+    public final int startTime;
+    public final int endTime;
+    public final int maxNumberRequests;
+
+    // Postgres env variables
+    public final String postgresURL;
+    public final String postgresUser;
+    public final String postgresPassword;
 
     public EnvVariables() {
         Properties properties = new Properties();
@@ -25,6 +34,10 @@ public class EnvVariables {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        this.user = System.getenv("APPLICATION_USER") != null
+            ? System.getenv("APPLICATION_USER") 
+            : properties.getProperty("APPLICATION_USER");
 
         this.apiKey = System.getenv("API_KEY") != null
             ? System.getenv("API_KEY") 
@@ -42,13 +55,37 @@ public class EnvVariables {
             ? parseDoubleProperty(System.getenv("LONGITUDE"))
             : parseDoubleProperty(properties.getProperty("LONGITUDE"));
 
-        this.interval = System.getenv("INTERVAL") != null
-            ? parseIntProperty(System.getenv("INTERVAL"))
-            : parseIntProperty(properties.getProperty("INTERVAL"));
+        this.waitTime = System.getenv("WAIT_TIME") != null
+            ? parseIntProperty(System.getenv("WAIT_TIME"))
+            : parseIntProperty(properties.getProperty("WAIT_TIME"));
 
         this.radius = System.getenv("RADIUS") != null
             ? parseIntProperty(System.getenv("RADIUS"))
             : parseIntProperty(properties.getProperty("RADIUS"));
+
+        this.startTime = System.getenv("START_TIME") != null
+            ? parseIntProperty(System.getenv("START_TIME"))
+            : parseIntProperty(properties.getProperty("START_TIME"));
+
+        this.endTime = System.getenv("END_TIME") != null
+            ? parseIntProperty(System.getenv("END_TIME"))
+            : parseIntProperty(properties.getProperty("END_TIME"));
+
+        this.maxNumberRequests = System.getenv("MAX_NUMBER_REQUESTS") != null
+            ? parseIntProperty(System.getenv("MAX_NUMBER_REQUESTS"))
+            : parseIntProperty(properties.getProperty("MAX_NUMBER_REQUESTS"));
+
+        this.postgresURL = System.getenv("POSTGRES_URL") != null
+            ? System.getenv("POSTGRES_URL") 
+            : properties.getProperty("POSTGRES_URL");
+
+        this.postgresUser = System.getenv("POSTGRES_USER") != null
+            ? System.getenv("POSTGRES_USER") 
+            : properties.getProperty("POSTGRES_USER");
+
+        this.postgresPassword = System.getenv("POSTGRES_PASSWORD") != null
+            ? System.getenv("POSTGRES_PASSWORD") 
+            : properties.getProperty("POSTGRES_PASSWORD");
     }
 
     private double parseDoubleProperty(String value) {

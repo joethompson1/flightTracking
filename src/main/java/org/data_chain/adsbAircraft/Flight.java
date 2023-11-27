@@ -12,21 +12,20 @@ public class Flight {
     private String registration;
     private String aircraftType;
     private Integer altitudeBaro;
-
-    @JsonProperty("track")
-    private Double track;
-
     private String squawk;
     private String emergency;
     private String category;
 
-    @JsonProperty("latitude")
+    @JsonProperty("track")
+    private Double track;
+
+    @JsonProperty("lat")
     private Double latitude;
 
-    @JsonProperty("longitude")
+    @JsonProperty("lon")
     private Double longitude;
 
-    @JsonProperty("nice")
+    @JsonProperty("nic")
     private Integer nic;
 
     @JsonProperty("rc")
