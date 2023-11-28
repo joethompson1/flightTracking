@@ -35,5 +35,10 @@ jobs:
         distribution: 'adopt'
         java-version: '17'
 
+    - name: Print Environment Variables
+      run: |
+        echo "API_KEY: $API_KEY"
+        echo "POSTGRES_PASSWORD: $POSTGRES_PASSWORD"
+
     - name: Build with Maven
       run: mvn -B clean install
