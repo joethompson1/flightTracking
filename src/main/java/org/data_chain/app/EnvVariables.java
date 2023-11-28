@@ -20,12 +20,12 @@ public class EnvVariables {
     public final String postgresUser;
     public final String postgresPassword;
 
-    public EnvVariables() {
+    public EnvVariables(String configFilePath) {
         Properties properties = new Properties();
 
-        try (InputStream input = EnvVariables.class.getClassLoader().getResourceAsStream("config/config.properties")) {
+        try (InputStream input = EnvVariables.class.getClassLoader().getResourceAsStream(configFilePath)) {
             if (input == null) {
-                throw new RuntimeException("Unable to find config.properties");
+                throw new RuntimeException("Unable to find " + configFilePath);
             }
 
             // Load the properties file

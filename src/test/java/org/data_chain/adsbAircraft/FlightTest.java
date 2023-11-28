@@ -39,7 +39,7 @@ public class FlightTest
         Flight flight = flights.get(0);
         assertEquals("3e4719", flight.hex());
         assertEquals("adsb_icao", flight.type());
-        assertEquals("DISCV   ", flight.flight());
+        assertEquals("DISCV", flight.flight());
         assertEquals("D-ISCV", flight.registration());
         assertEquals("C25A", flight.aircraftType());
         assertEquals(250.19D, (double) flight.track(), 0);
@@ -70,7 +70,7 @@ public class FlightTest
         Flight flight = flights.get(0);
         assertEquals("3e4719", flight.hex());
         assertEquals("adsb_icao", flight.type());
-        assertEquals("DISCV   ", flight.flight());
+        assertEquals("DISCV", flight.flight());
         assertEquals(0L, (long) flight.altitudeBaro());
     }
 }

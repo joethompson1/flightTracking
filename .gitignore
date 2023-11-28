@@ -1,6 +1,9 @@
 # Ignore configuration file
 src/main/resources/config/config.properties
 
+# Ignore test configuration file
+src/test/resources/config/test-config.properties
+
 # Ignore target folder
 target/
 .env
