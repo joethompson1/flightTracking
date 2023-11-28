@@ -5,24 +5,24 @@ on:
     branches:
       - main
 
-env:
-  API_KEY: ${{ secrets.API_KEY }}
-  POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-  POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
-  POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-  APPLICATION_USER: ${{ secrets.APPLICATION_USER }}
-  BASE_URL: ${{ secrets.BASE_URL }}
-  END_TIME: ${{ secrets.END_TIME }}
-  LATITUDE: ${{ secrets.LATITUDE }}
-  LONGITUDE: ${{ secrets.LONGITUDE }}
-  MAX_NUMBER_REQUESTS: ${{ secrets.MAX_NUMBER_REQUESTS }}
-  RADIUS: ${{ secrets.RADIUS }}
-  START_TIME: ${{ secrets.START_TIME }}
-  WAIT_TIME: ${{ secrets.WAIT_TIME }}
 
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    env:
+      API_KEY: ${{ secrets.API_KEY }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
+      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+      APPLICATION_USER: ${{ vars.APPLICATION_USER }}
+      BASE_URL: ${{ vars.BASE_URL }}
+      END_TIME: ${{ vars.END_TIME }}
+      LATITUDE: ${{ vars.LATITUDE }}
+      LONGITUDE: ${{ vars.LONGITUDE }}
+      MAX_NUMBER_REQUESTS: ${{ vars.MAX_NUMBER_REQUESTS }}
+      RADIUS: ${{ vars.RADIUS }}
+      START_TIME: ${{ vars.START_TIME }}
+      WAIT_TIME: ${{ vars.WAIT_TIME }}
 
 
     steps:
