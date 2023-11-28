@@ -6,9 +6,14 @@ on:
       - main
 
 jobs:
-  build:
-
+  build and test:
     runs-on: ubuntu-latest
+
+    env:
+      API_KEY: ${{ secrets.API_KEY }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
+      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
 
     steps:
     - name: Checkout code
@@ -22,6 +27,3 @@ jobs:
 
     - name: Build with Maven
       run: mvn -B clean install
-
-    - name: Run tests
-      run: mvn test
