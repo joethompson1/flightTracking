@@ -38,9 +38,9 @@ jobs:
 
     - name: Print Environment Variables
       run: |
-        echo "API_KEY: $API_KEY"
-        echo "POSTGRES_PASSWORD: $POSTGRES_PASSWORD"
-        echo "START_TIME: $START_TIME"
+        echo "API_KEY: env.API_KEY"
+        echo "POSTGRES_PASSWORD: env.POSTGRES_PASSWORD"
+        echo "START_TIME: env.START_TIME"
 
     - name: Build with Maven
       run: mvn --batch-mode --update-snapshots verify
