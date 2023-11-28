@@ -11,14 +11,14 @@ env:
   POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
   POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
   APPLICATION_USER: ${{ secrets.APPLICATION_USER }}
-  BASE_URL: ${{ var.BASE_URL }}
-  END_TIME: ${{ var.END_TIME }}
-  LATITUDE: ${{ var.LATITUDE }}
-  LONGITUDE: ${{ var.LONGITUDE }}
-  MAX_NUMBER_REQUESTS: ${{ var.MAX_NUMBER_REQUESTS }}
-  RADIUS: ${{ var.RADIUS }}
-  START_TIME: ${{ var.START_TIME }}
-  WAIT_TIME: ${{ var.WAIT_TIME }}
+  BASE_URL: ${{ secrets.BASE_URL }}
+  END_TIME: ${{ secrets.END_TIME }}
+  LATITUDE: ${{ secrets.LATITUDE }}
+  LONGITUDE: ${{ secrets.LONGITUDE }}
+  MAX_NUMBER_REQUESTS: ${{ secrets.MAX_NUMBER_REQUESTS }}
+  RADIUS: ${{ secrets.RADIUS }}
+  START_TIME: ${{ secrets.START_TIME }}
+  WAIT_TIME: ${{ secrets.WAIT_TIME }}
 
 jobs:
   build-and-test:
