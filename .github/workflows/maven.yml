@@ -21,9 +21,8 @@ env:
   WAIT_TIME: ${{ secrets.WAIT_TIME }}
 
 jobs:
-  build-and-test:
+  build:
     runs-on: ubuntu-latest
-
 
     steps:
     - name: Checkout code
@@ -36,21 +35,22 @@ jobs:
         java-version: '17'
         cache: maven
 
-    - name: Print Environment Variables
-      run: |
-        echo "API_KEY: ${{ env.API_KEY }}"
-        echo "POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}"
-        echo "POSTGRES_URL: ${{ env.POSTGRES_URL }}"
-        echo "POSTGRES_USER: ${{ env.POSTGRES_USER }}"
-        echo "APPLICATION_USER: ${{ env.APPLICATION_USER }}"
-        echo "BASE_URL: ${{ env.BASE_URL }}"
-        echo "LATITUDE: ${{ env.LATITUDE }}"
-        echo "LONGITUDE: ${{ env.LONGITUDE }}"
-        echo "MAX_NUMBER_REQUESTS: ${{ env.MAX_NUMBER_REQUESTS }}"
-        echo "RADIUS: ${{ env.RADIUS }}"
-        echo "START_TIME: ${{ env.START_TIME }}"
-        echo "END_TIME: ${{ env.END_TIME }}"
-        echo "WAIT_TIME: ${{ env.WAIT_TIME }}"
+    - name: Build with Maven
+      run: mvn install -DskipTests
+
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up JDK
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'adopt'
+        java-version: '17'
+        cache: maven
 
     - name: Build with Maven
-      run: mvn --batch-mode --update-snapshots verify
+      run: mvn clean test

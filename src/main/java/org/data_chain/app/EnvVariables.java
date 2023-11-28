@@ -24,13 +24,13 @@ public class EnvVariables {
         Properties properties = new Properties();
 
         try (InputStream input = EnvVariables.class.getClassLoader().getResourceAsStream(configFilePath)) {
-            if (input == null) {
-                throw new RuntimeException("Unable to find " + configFilePath);
+            if (input != null) {
+                // Load the properties file
+                properties.load(input);
+            } else {
+                // Handles the case when configFilePath is not found
+                System.err.println("Config file not found: " + configFilePath);
             }
-
-            // Load the properties file
-            properties.load(input);
-
         } catch (Exception e) {
             e.printStackTrace();
         }
