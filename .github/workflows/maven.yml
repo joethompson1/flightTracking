@@ -52,5 +52,5 @@ jobs:
         java-version: '17'
         cache: maven
 
-    - name: Build with Maven
+    - name: Run tests
       run: mvn clean test
